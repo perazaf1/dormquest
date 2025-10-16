@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,93 +8,70 @@
     <link rel="stylesheet" href="/frontend/css/style.css">
     <title>DormQuest</title>
 </head>
+
 <body>
-    <header>
-        <div class="container">
-            <div class="logo">DormQuest</div>
-            <nav>
-                <ul>
-                    <li><a href="#faq">FAQ</a></li>
-                    <li><a href="/frontend/contact.html">Contactez-nous</a></li>
-                    <li><a href="/frontend/login.html" class="btn-light">Se connecter</a></li>
-                    <li><a href="/frontend/annonces.html" class="btn-primary">Déposer une annonce</a></li>
-                </ul>
-            </nav>
-        </div>
+    <header id="mainHeader">
+        <nav id="mainNav">
+            <div class="logoContainer" id="logoContainer">
+                <h1 id="siteTitle">StudentHousing</h1>
+            </div>
+            <ul id="navLinks">
+                <li><a href="#heroSection">Accueil</a></li>
+                <li><a href="/frontend/annonces.html">Annonces</a></li>
+                <li><a href="/frontend/contact.html">Contact</a></li>
+            </ul>
+            <button id="loginBtn">Se connecter</button>
+        </nav>
     </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Trouvez votre logement étudiant en toute simplicité</h1>
-            <p>Recherchez, comparez et contactez des propriétaires en toute confiance.</p>
-            <form class="search-bar">
-                <input type="text" placeholder="Ville">
-                <input type="number" placeholder="Budget max (€)">
-                <button type="submit">Rechercher</button>
-            </form>
+    <!-- HERO -->
+    <section id="heroSection">
+        <h2 id="heroTitle">Trouvez le logement parfait pour vos études</h2>
+        <p id="heroSubtitle">Recherchez parmi des centaines d’annonces vérifiées proposées par des particuliers et des
+            organismes partenaires.</p>
+
+        <div id="searchBarContainer">
+            <input type="text" id="searchInput" placeholder="Rechercher un logement...">
+            <button id="searchBtn">Rechercher</button>
         </div>
     </section>
 
-    <section class="cities">
-        <h2>🏙️ Villes étudiantes populaires</h2>
-        <div class="city-grid">
-            <div class="city-card">Paris</div>
-            <div class="city-card">Lyon</div>
-            <div class="city-card">Toulouse</div>
-            <div class="city-card">Bordeaux</div>
-            <div class="city-card">Lille</div>
+    <!-- FEATURED LISTINGS -->
+    <section id="featuredListings">
+        <h3 id="featuredTitle">Annonces populaires</h3>
+        <div class="listingGrid" id="listingGrid">
+            <div class="listingCard" id="listingCard1">
+                <div class="listingImage" id="listingImg1"></div>
+                <div class="listingContent" id="listingContent1">
+                    <h4>Studio proche ISEP</h4>
+                    <p>Paris 6ème - 800€/mois</p>
+                </div>
+            </div>
+
+            <div class="listingCard" id="listingCard2">
+                <div class="listingImage" id="listingImg2"></div>
+                <div class="listingContent" id="listingContent2">
+                    <h4>Chambre étudiante à Montparnasse</h4>
+                    <p>Paris 14ème - 650€/mois</p>
+                </div>
+            </div>
+
+            <div class="listingCard" id="listingCard3">
+                <div class="listingImage" id="listingImg3"></div>
+                <div class="listingContent" id="listingContent3">
+                    <h4>Appartement partagé</h4>
+                    <p>Issy-les-Moulineaux - 500€/mois</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="presentation">
-        <h2>Pourquoi choisir DormQuest ?</h2>
-        <p>Notre plateforme accompagne les étudiants et les propriétaires dans leurs démarches pour simplifier la recherche de logement.</p>
-        <div class="stats">
-            <div><strong>100%</strong><br>Confiance</div>
-            <div><strong>500+</strong><br>Annonces vérifiées</div>
-            <div><strong>200+</strong><br>Partenaires</div>
-        </div>
-    </section>
-
-    <section class="news">
-        <h2>📰 Actualités étudiantes</h2>
-        <div class="news-grid">
-            <article>
-                <h3>Les meilleures astuces pour emménager à moindre coût</h3>
-                <p>Découvrez comment économiser sur votre premier logement étudiant.</p>
-            </article>
-            <article>
-                <h3>Colocations : les bons réflexes</h3>
-                <p>Vivre à plusieurs, c’est mieux ! Voici nos conseils pour une cohabitation réussie.</p>
-            </article>
-            <article>
-                <h3>Top 5 des villes étudiantes 2025</h3>
-                <p>Découvrez le classement des villes où il fait bon étudier cette année.</p>
-            </article>
-        </div>
-    </section>
-
-    <section class="reviews">
-        <h2>💬 Avis des étudiants</h2>
-        <div class="review-grid">
-            <div class="review">"J’ai trouvé mon studio à Lyon en 3 jours, super plateforme !" — <strong>Emma</strong></div>
-            <div class="review">"Simple, clair et efficace !" — <strong>Lucas</strong></div>
-            <div class="review">"DormQuest m’a aidé à trouver une colocation idéale." — <strong>Sarah</strong></div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-container">
-            <p>&copy; 2025 DormQuest - Tous droits réservés</p>
-            <ul>
-                <li><a href="#">CGU</a></li>
-                <li><a href="#">Mentions légales</a></li>
-                <li><a href="#">Forum</a></li>
-                <li><a href="#">Confidentialité</a></li>
-            </ul>
-        </div>
+    <!-- FOOTER -->
+    <footer id="mainFooter">
+        <p>&copy; DormQuest. Tous droits réservés. | <a href="#">Mentions légales</a></p>
     </footer>
 
     <script src="/frontend/js/main.js"></script>
 </body>
+
 </html>
