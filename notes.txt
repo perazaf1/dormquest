@@ -1,0 +1,6 @@
+--primary: #137C8B;
+--secondary: #709CA7;
+--light: #B8CBD0;
+--accent: #7A90A4;
+--dark: #344D59;
+--font-main: "Poppins", sans-serif;

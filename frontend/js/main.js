@@ -10,17 +10,15 @@ searchInput.addEventListener("blur", () => {
   }
 });
 
-
 const footer = document.getElementById("mainFooter");
 
 const footerObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     if (entry.isIntersecting) footer.classList.add("footerVisible");
   });
 });
 
 footerObserver.observe(footer);
-
 
 let lastScroll = 0;
 const header = document.getElementById("mainHeader");
