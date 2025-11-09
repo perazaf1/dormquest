@@ -12,6 +12,7 @@ session_start();
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/dashboard-loueur.css.css">
 </head>
 <body>
     <!-- Header -->

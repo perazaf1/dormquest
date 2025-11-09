@@ -1,30 +1,100 @@
 <?php
-// dashboard-loueur.php - Tableau de bord loueur
+// dashboard-loueur.php - Dashboard complet loueur
 session_start();
 
+// Inclure les fonctions d'authentification
 require_once 'includes/auth.php';
 require_once 'includes/db.php';
 
-// Vérifie que l'utilisateur est un loueur connecté
+// Vérifier que l'utilisateur est un loueur connecté
 require_loueur();
 
-// Récupération des infos complètes du loueur
+// Récupérer les informations complètes du loueur
 $user = get_user_info($pdo);
+$user_id = get_user_id();
 
-// Récupération des annonces créées par ce loueur
-$stmt = $pdo->prepare("SELECT * FROM annonces WHERE idLoueur = ?");
-$stmt->execute([$user['id']]);
-$annonces = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Gestion de la suppression d'annonce
+if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
+    $annonce_id = (int)$_GET['id'];
+    
+    try {
+        // Vérifier que l'annonce appartient bien au loueur
+        $stmt = $pdo->prepare("SELECT id FROM annonces WHERE id = ? AND idLoueur = ?");
+        $stmt->execute([$annonce_id, $user_id]);
+        
+        if ($stmt->fetch()) {
+            // Supprimer l'annonce
+            $stmt = $pdo->prepare("DELETE FROM annonces WHERE id = ?");
+            $stmt->execute([$annonce_id]);
+            
+            $success_message = "Annonce supprimée avec succès.";
+        } else {
+            $error_message = "Cette annonce ne vous appartient pas.";
+        }
+    } catch (PDOException $e) {
+        $error_message = "Erreur lors de la suppression : " . $e->getMessage();
+    }
+}
+
+// Gestion de l'archivage/réactivation d'annonce
+if (isset($_GET['action']) && in_array($_GET['action'], ['archive', 'activate']) && isset($_GET['id'])) {
+    $annonce_id = (int)$_GET['id'];
+    $new_status = $_GET['action'] === 'archive' ? 'archivee' : 'active';
+    
+    try {
+        // Vérifier que l'annonce appartient bien au loueur
+        $stmt = $pdo->prepare("SELECT id FROM annonces WHERE id = ? AND idLoueur = ?");
+        $stmt->execute([$annonce_id, $user_id]);
+        
+        if ($stmt->fetch()) {
+            // Changer le statut
+            $stmt = $pdo->prepare("UPDATE annonces SET statut = ? WHERE id = ?");
+            $stmt->execute([$new_status, $annonce_id]);
+            
+            $success_message = $new_status === 'archivee' ? "Annonce archivée avec succès." : "Annonce réactivée avec succès.";
+        } else {
+            $error_message = "Cette annonce ne vous appartient pas.";
+        }
+    } catch (PDOException $e) {
+        $error_message = "Erreur lors de la modification : " . $e->getMessage();
+    }
+}
+
+// Récupérer toutes les annonces du loueur
+try {
+    $stmt = $pdo->prepare("
+        SELECT 
+            a.*,
+            COUNT(DISTINCT c.id) as nb_candidatures,
+            COUNT(DISTINCT f.id) as nb_favoris
+        FROM annonces a
+        LEFT JOIN candidatures c ON c.idAnnonce = a.id
+        LEFT JOIN favoris f ON f.idAnnonce = a.id
+        WHERE a.idLoueur = ?
+        GROUP BY a.id
+        ORDER BY a.dateCreation DESC
+    ");
+    $stmt->execute([$user_id]);
+    $annonces = $stmt->fetchAll();
+    
+    // Statistiques globales
+    $total_annonces = count($annonces);
+    $annonces_actives = count(array_filter($annonces, fn($a) => $a['statut'] === 'active'));
+    $total_candidatures = array_sum(array_column($annonces, 'nb_candidatures'));
+    
+} catch (PDOException $e) {
+    $annonces = [];
+    $error_message = "Erreur lors de la récupération des annonces : " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord Loueur - DormQuest</title>
-    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>Mes annonces - DormQuest</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
     <!-- Header -->
@@ -35,9 +105,16 @@ $annonces = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <span class="header__logo-text">DormQuest</span>
             </a>
             <nav class="header__nav">
-                <a href="dashboard-loueur.php" class="header__nav-link">Tableau de bord</a>
-                <a href="deposer-annonce.php" class="header__nav-link">Déposer une annonce</a>
+                <a href="dashboard-loueur.php" class="header__nav-link header__nav-link--active">Mes annonces</a>
+                <a href="create-annonce.php" class="header__nav-link">Créer une annonce</a>
                 <a href="profil.php" class="header__nav-link">Mon profil</a>
+                <div class="header__user">
+                    <img src="<?php echo htmlspecialchars(get_user_photo()); ?>" 
+                         alt="Photo de profil" 
+                         class="header__user-photo"
+                         onerror="this.src='images/default-avatar.png'">
+                    <span class="header__user-name"><?php echo htmlspecialchars(get_user_prenom()); ?></span>
+                </div>
                 <a href="logout.php" class="header__btn header__btn--logout">Déconnexion</a>
             </nav>
         </div>
@@ -45,103 +122,191 @@ $annonces = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <main class="dashboard">
         <div class="dashboard__container">
+            <!-- En-tête du dashboard -->
             <div class="dashboard__header">
-                <h1 class="dashboard__title">
-                    Bienvenue, <?php echo htmlspecialchars(get_user_prenom()); ?> 👋
-                </h1>
-                <p class="dashboard__subtitle">
-                    Gérez vos annonces et vos candidatures
-                </p>
+                <div class="dashboard__header-content">
+                    <h1 class="dashboard__title">Mes annonces</h1>
+                    <p class="dashboard__subtitle">Gérez vos logements en quelques clics</p>
+                </div>
+                <a href="create-annonce.php" class="dashboard__btn dashboard__btn--primary">
+                    <span class="dashboard__btn-icon">➕</span>
+                    Créer une annonce
+                </a>
             </div>
 
-            <!-- Message de succès connexion -->
-            <div class="alert alert--success">
-                <strong>✅ Connexion réussie !</strong>
-                <p>Vous êtes maintenant connecté en tant que loueur.</p>
-            </div>
+            <!-- Messages -->
+            <?php if (isset($_GET['success']) && $_GET['success'] === 'annonce_created'): ?>
+                <div class="alert alert--success">
+                    <strong>✅ Annonce créée avec succès !</strong>
+                    <p>Votre annonce est maintenant visible par tous les étudiants.</p>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (isset($success_message)): ?>
+                <div class="alert alert--success">
+                    <strong>✅ <?php echo htmlspecialchars($success_message); ?></strong>
+                </div>
+            <?php endif; ?>
 
-            <!-- Informations du compte -->
-            <div class="dashboard__section">
-                <h2 class="dashboard__section-title">📋 Mes informations</h2>
-                <div class="dashboard__card">
-                    <div class="user-info">
-                        <div class="user-info__photo">
-                            <img src="<?php echo htmlspecialchars(get_user_photo()); ?>" 
-                                 alt="Photo de profil" 
-                                 onerror="this.src='images/default-avatar.png'">
-                        </div>
-                        <div class="user-info__details">
-                            <p><strong>Nom :</strong> <?php echo htmlspecialchars(get_user_fullname()); ?></p>
-                            <p><strong>Email :</strong> <?php echo htmlspecialchars($_SESSION['user_email']); ?></p>
-                            <p><strong>Rôle :</strong> Loueur</p>
-                            <?php if ($user): ?>
-                                <p><strong>Entreprise / Nom du bailleur :</strong> <?php echo htmlspecialchars($user['nomEntreprise'] ?? 'Non renseigné'); ?></p>
-                                <p><strong>Ville principale :</strong> <?php echo htmlspecialchars($user['ville'] ?? 'Non renseignée'); ?></p>
-                            <?php endif; ?>
-                        </div>
+            <?php if (isset($error_message)): ?>
+                <div class="alert alert--error">
+                    <strong>⚠️ <?php echo htmlspecialchars($error_message); ?></strong>
+                </div>
+            <?php endif; ?>
+
+            <!-- Statistiques -->
+            <div class="dashboard__stats">
+                <div class="stat-card">
+                    <div class="stat-card__icon">📋</div>
+                    <div class="stat-card__content">
+                        <div class="stat-card__value"><?php echo $total_annonces; ?></div>
+                        <div class="stat-card__label">Annonce<?php echo $total_annonces > 1 ? 's' : ''; ?> totale<?php echo $total_annonces > 1 ? 's' : ''; ?></div>
+                    </div>
+                </div>
+                <div class="stat-card stat-card--success">
+                    <div class="stat-card__icon">✅</div>
+                    <div class="stat-card__content">
+                        <div class="stat-card__value"><?php echo $annonces_actives; ?></div>
+                        <div class="stat-card__label">Annonce<?php echo $annonces_actives > 1 ? 's' : ''; ?> active<?php echo $annonces_actives > 1 ? 's' : ''; ?></div>
+                    </div>
+                </div>
+                <div class="stat-card stat-card--info">
+                    <div class="stat-card__icon">📬</div>
+                    <div class="stat-card__content">
+                        <div class="stat-card__value"><?php echo $total_candidatures; ?></div>
+                        <div class="stat-card__label">Candidature<?php echo $total_candidatures > 1 ? 's' : ''; ?> reçue<?php echo $total_candidatures > 1 ? 's' : ''; ?></div>
                     </div>
                 </div>
             </div>
 
             <!-- Liste des annonces -->
             <div class="dashboard__section">
-                <h2 class="dashboard__section-title">🏘️ Mes annonces</h2>
+                <?php if (empty($annonces)): ?>
+                    <!-- Message si aucune annonce -->
+                    <div class="empty-state">
+                        <div class="empty-state__icon">🏠</div>
+                        <h2 class="empty-state__title">Aucune annonce pour le moment</h2>
+                        <p class="empty-state__text">
+                            Commencez par créer votre première annonce de logement et touchez des milliers d'étudiants !
+                        </p>
+                        <a href="create-annonce.php" class="empty-state__btn">
+                            Créer ma première annonce
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <!-- Filtres -->
+                    <div class="dashboard__filters">
+                        <button class="filter-btn filter-btn--active" data-filter="all">
+                            Toutes (<?php echo $total_annonces; ?>)
+                        </button>
+                        <button class="filter-btn" data-filter="active">
+                            Actives (<?php echo $annonces_actives; ?>)
+                        </button>
+                        <button class="filter-btn" data-filter="archivee">
+                            Archivées (<?php echo $total_annonces - $annonces_actives; ?>)
+                        </button>
+                    </div>
 
-                <div class="dashboard__actions">
-                    <a href="deposer-annonce.php" class="dashboard__action-card">
-                        <span class="dashboard__action-icon">➕</span>
-                        <h3 class="dashboard__action-title">Déposer une annonce</h3>
-                        <p class="dashboard__action-desc">Publiez une nouvelle offre de logement</p>
-                    </a>
-                </div>
-
-                <?php if (count($annonces) > 0): ?>
-                    <div class="dashboard__list">
+                    <!-- Grille d'annonces -->
+                    <div class="annonces-grid">
                         <?php foreach ($annonces as $annonce): ?>
-                            <div class="dashboard__card annonce-card">
-                                <div class="annonce-card__content">
-                                    <h3 class="annonce-card__title"><?php echo htmlspecialchars($annonce['titre']); ?></h3>
-                                    <p class="annonce-card__desc"><?php echo htmlspecialchars(substr($annonce['description'], 0, 150)); ?>...</p>
-                                    <p class="annonce-card__info">
-                                        <strong>Ville :</strong> <?php echo htmlspecialchars($annonce['ville']); ?> |
-                                        <strong>Loyer :</strong> <?php echo number_format($annonce['loyer'], 2, ',', ' '); ?> €
-                                    </p>
-                                </div>
-                                <div class="annonce-card__actions">
-                                    <a href="modifier-annonce.php?id=<?php echo $annonce['id']; ?>" class="btn btn--primary">Modifier</a>
-                                    <a href="supprimer-annonce.php?id=<?php echo $annonce['id']; ?>" class="btn btn--danger" onclick="return confirm('Supprimer cette annonce ?')">Supprimer</a>
-                                    <a href="archiver-annonce.php?id=<?php echo $annonce['id']; ?>" class="btn btn--secondary">Archiver</a>
-                                </div>
+                            <div class="annonce-card" data-status="<?php echo $annonce['statut']; ?>">
+                                <!-- Badge statut -->
+                                <?php if ($annonce['statut'] === 'archivee'): ?>
+                                    <span class="annonce-card__badge annonce-card__badge--archived">Archivée</span>
+                                <?php else: ?>
+                                    <span class="annonce-card__badge annonce-card__badge--active">Active</span>
+                                <?php endif; ?>
 
-                                <!-- Candidatures reçues -->
-                                <?php
-                                $stmtC = $pdo->prepare("SELECT COUNT(*) FROM candidatures WHERE idAnnonce = ?");
-                                $stmtC->execute([$annonce['id']]);
-                                $nbCandidatures = $stmtC->fetchColumn();
-                                ?>
-                                <div class="annonce-card__footer">
-                                    <p><strong>📨 Candidatures reçues :</strong> <?php echo $nbCandidatures; ?></p>
-                                    <?php if ($nbCandidatures > 0): ?>
-                                        <a href="candidatures-annonce.php?id=<?php echo $annonce['id']; ?>" class="btn btn--small btn--info">Voir les candidatures</a>
+                                <!-- Image -->
+                                <div class="annonce-card__image">
+                                    <?php if (!empty($annonce['contactEmail'])): ?>
+                                        <img src="https://via.placeholder.com/400x250/2563eb/ffffff?text=<?php echo urlencode(substr($annonce['titre'], 0, 20)); ?>" 
+                                             alt="<?php echo htmlspecialchars($annonce['titre']); ?>">
                                     <?php endif; ?>
                                 </div>
+
+                                <!-- Contenu -->
+                                <div class="annonce-card__content">
+                                    <h3 class="annonce-card__title">
+                                        <?php echo htmlspecialchars($annonce['titre']); ?>
+                                    </h3>
+                                    
+                                    <div class="annonce-card__info">
+                                        <span class="annonce-card__info-item">
+                                            📍 <?php echo htmlspecialchars($annonce['ville']); ?>
+                                        </span>
+                                        <span class="annonce-card__info-item">
+                                            💰 <?php echo number_format($annonce['prixMensuel'], 0, ',', ' '); ?> €/mois
+                                        </span>
+                                        <span class="annonce-card__info-item">
+                                            📐 <?php echo $annonce['superficie']; ?> m²
+                                        </span>
+                                    </div>
+
+                                    <div class="annonce-card__meta">
+                                        <span class="annonce-card__meta-item">
+                                            <strong><?php echo $annonce['nb_candidatures']; ?></strong> candidature<?php echo $annonce['nb_candidatures'] > 1 ? 's' : ''; ?>
+                                        </span>
+                                        <span class="annonce-card__meta-item">
+                                            <strong><?php echo $annonce['nb_favoris']; ?></strong> favori<?php echo $annonce['nb_favoris'] > 1 ? 's' : ''; ?>
+                                        </span>
+                                    </div>
+
+                                    <div class="annonce-card__date">
+                                        Créée le <?php echo date('d/m/Y', strtotime($annonce['dateCreation'])); ?>
+                                    </div>
+                                </div>
+
+                                <!-- Actions -->
+                                <div class="annonce-card__actions">
+                                    <a href="annonce.php?id=<?php echo $annonce['id']; ?>" 
+                                       class="annonce-card__btn annonce-card__btn--view"
+                                       title="Voir l'annonce">
+                                        👁️ Voir
+                                    </a>
+                                    <a href="edit-annonce.php?id=<?php echo $annonce['id']; ?>" 
+                                       class="annonce-card__btn annonce-card__btn--edit"
+                                       title="Modifier l'annonce">
+                                        ✏️ Modifier
+                                    </a>
+                                    
+                                    <?php if ($annonce['statut'] === 'active'): ?>
+                                        <a href="?action=archive&id=<?php echo $annonce['id']; ?>" 
+                                           class="annonce-card__btn annonce-card__btn--archive"
+                                           onclick="return confirm('Voulez-vous vraiment archiver cette annonce ?')"
+                                           title="Archiver l'annonce">
+                                            📦 Archiver
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="?action=activate&id=<?php echo $annonce['id']; ?>" 
+                                           class="annonce-card__btn annonce-card__btn--activate"
+                                           title="Réactiver l'annonce">
+                                            ✅ Réactiver
+                                        </a>
+                                    <?php endif; ?>
+                                    
+                                    <a href="?action=delete&id=<?php echo $annonce['id']; ?>" 
+                                       class="annonce-card__btn annonce-card__btn--delete"
+                                       onclick="return confirm('⚠️ Êtes-vous sûr de vouloir supprimer cette annonce ? Cette action est irréversible.')"
+                                       title="Supprimer l'annonce">
+                                        🗑️ Supprimer
+                                    </a>
+                                </div>
+
+                                <!-- Candidatures (si présentes) -->
+                                <?php if ($annonce['nb_candidatures'] > 0): ?>
+                                    <div class="annonce-card__footer">
+                                        <a href="candidatures-annonce.php?id=<?php echo $annonce['id']; ?>" 
+                                           class="annonce-card__footer-link">
+                                            📬 Voir les <?php echo $annonce['nb_candidatures']; ?> candidature<?php echo $annonce['nb_candidatures'] > 1 ? 's' : ''; ?> →
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                     </div>
-                <?php else: ?>
-                    <div class="alert alert--info">
-                        <strong>Aucune annonce publiée.</strong>
-                        <p>Commencez dès maintenant en déposant votre première annonce.</p>
-                    </div>
                 <?php endif; ?>
-            </div>
-
-            <!-- Note de développement -->
-            <div class="dashboard__section">
-                <div class="alert alert--info">
-                    <strong>ℹ️ En développement</strong>
-                    <p>Des fonctionnalités supplémentaires seront bientôt disponibles pour les loueurs (statistiques, messagerie, gestion avancée des candidatures).</p>
-                </div>
             </div>
         </div>
     </main>
@@ -149,124 +314,11 @@ $annonces = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <footer class="footer footer--minimal">
         <div class="footer__container">
             <p class="footer__copyright">
-                &copy; 2025 DormQuest by Nyzer. Tous droits réservés.
+                &copy; 2024 DormQuest by Nyzer. Tous droits réservés.
             </p>
         </div>
     </footer>
+
+    <script src="js/dashboard-loueur.js"></script>
 </body>
 </html>
-
-<style>
-.dashboard {
-    min-height: calc(100vh - 200px);
-    padding: 3rem 0;
-    background-color: #f3f4f6;
-}
-
-.dashboard__container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-.dashboard__header {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.dashboard__title {
-    font-size: 2.5rem;
-    color: var(--color-primary);
-    margin-bottom: 0.5rem;
-}
-
-.dashboard__subtitle {
-    font-size: 1.125rem;
-    color: var(--color-gray);
-}
-
-.dashboard__section {
-    margin-bottom: 3rem;
-}
-
-.dashboard__section-title {
-    font-size: 1.5rem;
-    color: var(--color-primary);
-    margin-bottom: 1.5rem;
-}
-
-.dashboard__card {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    margin-bottom: 1.5rem;
-}
-
-.annonce-card__content {
-    margin-bottom: 1rem;
-}
-
-.annonce-card__title {
-    font-size: 1.25rem;
-    color: var(--color-primary-dark);
-    margin-bottom: 0.5rem;
-}
-
-.annonce-card__desc {
-    color: var(--color-gray-dark);
-    margin-bottom: 0.75rem;
-}
-
-.annonce-card__actions {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.btn {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.btn--primary { background-color: var(--color-primary); color: white; }
-.btn--primary:hover { background-color: var(--color-primary-dark); }
-
-.btn--danger { background-color: #dc2626; color: white; }
-.btn--danger:hover { background-color: #991b1b; }
-
-.btn--secondary { background-color: #e5e7eb; color: #111827; }
-.btn--secondary:hover { background-color: #d1d5db; }
-
-.btn--info { background-color: #2563eb; color: white; }
-.btn--info:hover { background-color: #1e40af; }
-
-.btn--small { font-size: 0.875rem; padding: 0.4rem 0.8rem; }
-
-.annonce-card__footer {
-    margin-top: 1rem;
-    border-top: 1px solid #e5e7eb;
-    padding-top: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.alert--info {
-    background-color: #dbeafe;
-    border-color: var(--color-primary);
-    color: #1e40af;
-}
-
-.header__btn--logout {
-    background-color: #dc2626;
-    color: white;
-}
-
-.header__btn--logout:hover {
-    background-color: #991b1b;
-}
-</style>
