@@ -49,7 +49,7 @@ session_start();
                 </a>
             </div>
             <div class="hero__image">
-                <img src="images/hero-illustration.jpg" alt="Étudiant cherchant un logement" class="hero__image-img">
+                <img src="images/hero-illustration2.jpg" alt="Étudiante cherchant un logement" class="hero__image-img">
             </div>
         </div>
     </section>
@@ -82,6 +82,21 @@ session_start();
                         <h4 class="avantages__card-title">Contact direct</h4>
                         <p class="avantages__card-text">
                             Candidatez en un clic et communiquez directement avec les loueurs.
+                        </p>
+                    </div>
+                    <div class="avantages__card">
+                        <a class="avantages__card-icon" href="https://www.dossierfacile.logement.gouv.fr/" target="_blank" rel="noopener noreferrer">📂</a>
+                        <h4 class="avantages__card-title">Dossier facile
+                            <span class="external-icon" aria-hidden="true">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M14 3h7v7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M21 21H3V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </h4>
+                        <p class="avantages__card-text">
+                            Créez facilement votre dossier grâce à des formulaires du gouvernement.
                         </p>
                     </div>
                 </div>
