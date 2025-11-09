@@ -100,6 +100,36 @@ session_start();
                             Créez facilement votre dossier grâce à des formulaires du gouvernement.
                         </p>
                     </div>
+                     <div class="avantages__card">
+                        <a class="avantages__card-icon" href="https://wwwd.caf.fr/wps/portal/caffr/aidesetdemarches/mesdemarches/faireunesimulation/lelogement#/preparation" target="_blank" rel="noopener noreferrer">💱</a>
+                        <h4 class="avantages__card-title">Calculateur d'APL
+                            <span class="external-icon" aria-hidden="true">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M14 3h7v7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M21 21H3V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </h4>
+                        <p class="avantages__card-text">
+                            Calculez rapidement vos aides au logement avec l'outil officiel de la CAF.
+                        </p>
+                    </div>
+                    <div class="avantages__card">
+                        <a class="avantages__card-icon" href="https://www.visale.fr/" target="_blank" rel="noopener noreferrer">🏡</a>
+                        <h4 class="avantages__card-title">Obtenez un garant
+                            <span class="external-icon" aria-hidden="true">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M14 3h7v7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M21 21H3V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                        </h4>
+                        <p class="avantages__card-text">
+                            Testez votre éligibilité d'un garant locatif via le dispositif Visale.
+                        </p>
+                    </div>
                 </div>
             </div>
 
