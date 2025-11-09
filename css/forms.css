@@ -318,6 +318,135 @@
     animation: fadeIn 0.4s ease;
 }
 
+/* === CONTENEUR ÉTROIT (pour login) === */
+.form-container--narrow {
+    max-width: 500px;
+}
+
+/* === INPUT GROUP (avec bouton) === */
+.form-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.form-input-group .form-input {
+    padding-right: 3rem;
+}
+
+.form-input-toggle {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0.5rem;
+    transition: var(--transition);
+    opacity: 0.6;
+}
+
+.form-input-toggle:hover {
+    opacity: 1;
+}
+
+/* === CHECKBOX === */
+.form-group--checkbox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.form-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.form-checkbox__input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    accent-color: var(--color-primary);
+}
+
+.form-checkbox__label {
+    font-size: 0.9375rem;
+    color: var(--color-gray-dark);
+    user-select: none;
+}
+
+.form-link--right {
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+/* === SÉPARATEUR === */
+.form-separator {
+    position: relative;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.form-separator::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #e5e7eb;
+}
+
+.form-separator__text {
+    position: relative;
+    display: inline-block;
+    padding: 0 1rem;
+    background-color: var(--color-white);
+    color: var(--color-gray);
+    font-size: 0.875rem;
+    z-index: 1;
+}
+
+/* === CONNEXION RAPIDE === */
+.form-quick-login {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-quick-login__btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.25rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: var(--border-radius);
+    background-color: var(--color-white);
+    transition: var(--transition);
+    text-align: center;
+}
+
+.form-quick-login__btn:hover {
+    border-color: var(--color-primary);
+    background-color: rgba(37, 99, 235, 0.05);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.form-quick-login__icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-quick-login__text {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
 /* === RESPONSIVE === */
 @media (max-width: 768px) {
     .form-page {
@@ -334,5 +463,19 @@
     
     .form-section__title {
         font-size: 1.25rem;
+    }
+    
+    .form-group--checkbox {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .form-link--right {
+        align-self: flex-end;
+    }
+    
+    .form-quick-login {
+        grid-template-columns: 1fr;
     }
 }

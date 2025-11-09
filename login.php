@@ -125,6 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - DormQuest</title>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/forms.css">
 </head>
@@ -260,7 +261,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <footer class="footer footer--minimal">
         <div class="footer__container">
             <p class="footer__copyright">
-                &copy; 2024 DormQuest by Nyzer. Tous droits réservés.
+                &copy; 2025 DormQuest by Nyzer. Tous droits réservés.
             </p>
         </div>
     </footer>

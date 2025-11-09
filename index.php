@@ -11,7 +11,7 @@ session_start();
     <title>DormQuest - Trouvez le logement parfait pour vos études !</title>
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/forms2.css">
+    <link rel="stylesheet" href="css/forms.css">
 </head>
 <body>
     <!-- Header -->
