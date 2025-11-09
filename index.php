@@ -254,6 +254,8 @@ session_start();
                     <li class="footer__item"><a href="register.php" class="footer__link">Inscription</a></li>
                     <li class="footer__item"><a href="login.php" class="footer__link">Connexion</a></li>
                     <li class="footer__item"><a href="contact.php" class="footer__link">Contact</a></li>
+                    <li class="footer__item"><a href="CGU.php" class="footer__link">CGU</a></li>
+                    <li class="footer__item"><a href="mentions-legales.php" class="footer__link">Mentions légales</a></li>
                 </ul>
             </div>
             <div class="footer__section">

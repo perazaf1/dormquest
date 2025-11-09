@@ -1,4 +1,5 @@
 // main.js - DormQuest JavaScript
+const userLang = navigator.language || navigator.userLanguage;
 // Smooth scroll pour les ancres
 document.addEventListener("DOMContentLoaded", function () {
   // === SMOOTH SCROLL ===
