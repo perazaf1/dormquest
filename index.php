@@ -13,6 +13,7 @@ session_start();
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/forms.css">
     <link rel="stylesheet" href="css/dashboard-loueur.css.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 </head>
 <body>
     <!-- Header -->
@@ -211,6 +212,13 @@ session_start();
                         vos annonces à tout moment.
                     </p>
                 </div>
+                <div class="faq__item">
+                    <h3 class="faq__question">Combien de temps pour obtenir une réponse ?</h3>
+                    <p class="faq__answer">
+                        Les propriétaires s'engagent à répondre sous 48 heures. Cependant, 
+                        le délai peut varier en fonction de la demande.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
@@ -254,8 +262,8 @@ session_start();
                     <li class="footer__item"><a href="register.php" class="footer__link">Inscription</a></li>
                     <li class="footer__item"><a href="login.php" class="footer__link">Connexion</a></li>
                     <li class="footer__item"><a href="contact.php" class="footer__link">Contact</a></li>
-                    <li class="footer__item"><a href="CGU.php" class="footer__link">CGU</a></li>
-                    <li class="footer__item"><a href="mentions-legales.php" class="footer__link">Mentions légales</a></li>
+                    <li class="footer__item"><a href="CGU.php" class="footer__link" target="blank">CGU</a></li>
+                    <li class="footer__item"><a href="mentions-legales.php" class="footer__link" target="blank">Mentions légales</a></li>
                 </ul>
             </div>
             <div class="footer__section">
@@ -273,5 +281,6 @@ session_start();
     <script src="js/main.js"></script>
     <script src="js/register.js"></script>
     <script src="js/login.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </body>
 </html>

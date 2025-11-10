@@ -42,6 +42,9 @@ CREATE TABLE annonces (
   INDEX idx_prix (prixMensuel)
 );
 
+
+
+
 -- Table 3 : photos_annonces
 CREATE TABLE photos_annonces (
   id INT PRIMARY KEY AUTO_INCREMENT,
