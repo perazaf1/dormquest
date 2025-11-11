@@ -488,7 +488,7 @@ try {
     <footer class="footer footer--minimal">
         <div class="footer__container">
             <p class="footer__copyright">
-                &copy; 2024 DormQuest by Nyzer. Tous droits réservés.
+                &copy; 2025 DormQuest by Nyzer. Tous droits réservés.
             </p>
         </div>
     </footer>
