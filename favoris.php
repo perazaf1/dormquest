@@ -94,7 +94,8 @@ try {
                     <img src="<?php echo htmlspecialchars(get_user_photo()); ?>" 
                          alt="Photo de profil" 
                          class="header__user-photo"
-                         onerror="this.src='images/default-avatar.png'">
+                         onerror="this.src='images/default-avatar.png'"
+                         width=90px height=90px>
                     <span class="header__user-name"><?php echo htmlspecialchars(get_user_prenom()); ?></span>
                 </div>
                 <a href="logout.php" class="header__btn header__btn--logout">Déconnexion</a>

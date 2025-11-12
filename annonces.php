@@ -418,8 +418,40 @@ function is_favori($annonce_id, $pdo) {
         </div>
     </main>
 
-    <footer class="footer footer--minimal">
+        <!-- Footer -->
+    <footer class="footer">
         <div class="footer__container">
+            <div class="footer__section">
+                <h4 class="footer__title">DormQuest</h4>
+                <p class="footer__text">
+                    Trouvez le logement parfait pour vos études !
+                </p>
+            </div>
+            <div class="footer__section">
+                <h4 class="footer__title">Navigation</h4>
+                <ul class="footer__list">
+                    <li class="footer__item"><a href="#annonces" class="footer__link">Annonces</a></li>
+                    <li class="footer__item"><a href="#avantages" class="footer__link">Avantages</a></li>
+                    <li class="footer__item"><a href="#apropos" class="footer__link">À propos</a></li>
+                    <li class="footer__item"><a href="#faq" class="footer__link">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer__section">
+                <h4 class="footer__title">Liens utiles</h4>
+                <ul class="footer__list">
+                    <li class="footer__item"><a href="register.php" class="footer__link">Inscription</a></li>
+                    <li class="footer__item"><a href="login.php" class="footer__link">Connexion</a></li>
+                    <li class="footer__item"><a href="contact.php" class="footer__link">Contact</a></li>
+                    <li class="footer__item"><a href="CGU.php" class="footer__link" target="blank">CGU</a></li>
+                    <li class="footer__item"><a href="mentions-legales.php" class="footer__link" target="blank">Mentions légales</a></li>
+                </ul>
+            </div>
+            <div class="footer__section">
+                <h4 class="footer__title">Powered by</h4>
+                <img src="images/logo-nyzer.png" alt="Nyzer" class="footer__nyzer-logo">
+            </div>
+        </div>
+        <div class="footer__bottom">
             <p class="footer__copyright">
                 &copy; 2025 DormQuest by Nyzer. Tous droits réservés.
             </p>

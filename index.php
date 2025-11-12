@@ -26,8 +26,8 @@ session_start();
             <nav class="header__nav">
                 <a href="#annonces" class="header__nav-link">Annonces</a>
                 <a href="#avantages" class="header__nav-link">Avantages</a>
-                <a href="#apropos" class="header__nav-link">À propos</a>
                 <a href="#faq" class="header__nav-link">FAQ</a>
+                <a href="#apropos" class="header__nav-link">À propos</a>
                 <a href="login.php" class="header__btn header__btn--login">Connexion</a>
                 <a href="register.php" class="header__btn header__btn--register">Inscription</a>
             </nav>
