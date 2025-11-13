@@ -1,6 +1,10 @@
 <?php
 // index.php - Landing Page DormQuest
 session_start();
+
+// Vérifier si l'utilisateur est connecté
+$isLoggedIn = isset($_SESSION['user_id']);
+$userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -20,16 +24,30 @@ session_start();
     <header class="header">
         <div class="header__container">
             <div class="header__logo">
-                <img src="images/logo-dormquest.png" alt="DormQuest Logo" class="header__logo-img">
-                <span class="header__logo-text">DormQuest</span>
+                <a href="index.php" style="display: flex; align-items: center; text-decoration: none; color: inherit;">
+                    <img src="images/logo-dormquest.png" alt="DormQuest Logo" class="header__logo-img">
+                    <span class="header__logo-text">DormQuest</span>
+                </a>
             </div>
             <nav class="header__nav">
                 <a href="#annonces" class="header__nav-link">Annonces</a>
                 <a href="#avantages" class="header__nav-link">Avantages</a>
                 <a href="#faq" class="header__nav-link">FAQ</a>
                 <a href="#apropos" class="header__nav-link">À propos</a>
-                <a href="login.php" class="header__btn header__btn--login">Connexion</a>
-                <a href="register.php" class="header__btn header__btn--register">Inscription</a>
+                
+                <?php if ($isLoggedIn): ?>
+                    <!-- Si l'utilisateur est connecté -->
+                    <?php if ($userType === 'loueur'): ?>
+                        <a href="dashboard-loueur.php" class="header__btn header__btn--login">Mon tableau de bord</a>
+                    <?php else: ?>
+                        <a href="dashboard-etudiant.php" class="header__btn header__btn--login">Mon tableau de bord</a>
+                    <?php endif; ?>
+                    <a href="logout.php" class="header__btn header__btn--register">Déconnexion</a>
+                <?php else: ?>
+                    <!-- Si l'utilisateur n'est pas connecté -->
+                    <a href="login.php" class="header__btn header__btn--login">Connexion</a>
+                    <a href="register.php" class="header__btn header__btn--register">Inscription</a>
+                <?php endif; ?>
             </nav>
         </div>
     </header>
