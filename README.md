@@ -23,7 +23,7 @@ Racine du projet (fichiers et dossiers importants) :
 - `index.php` : page d'accueil
 - `login.php`, `register.php`, `logout.php` : pages d'authentification
 - `dashboard-etudiant.php`, `dashboard-loueur.php` : tableaux de bord selon le rôle
-- `annonces.php`, `profil.php`, `contact.php` : pages applicatives
+- `annonces.php`, `profil.php`, `contact.php`,`favoris.php` : pages applicatives
 - `includes/` : fonctions partagées (ex. `auth.php`, `db.php`, `header.php`, `footer.php`)
 - `config/` : fichiers de configuration (ex. `config.php`, `auth.php`)
 - `css/`, `js/`, `images/` : assets front-end
