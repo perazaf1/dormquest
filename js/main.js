@@ -1,4 +1,28 @@
 // main.js - DormQuest JavaScript
+
+// Flèche de retour en haut
+const btn = document.querySelector('.index__arrow');
+
+// Afficher/masquer le bouton selon le scroll
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 1000) { // Apparaît après 1000px de scroll
+        btn.classList.add('visible');
+    } else {
+        btn.classList.remove('visible');
+    }
+});
+
+// Retour en haut au clic
+btn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth"
+    });
+});
+
+
+
 const userLang = navigator.language || navigator.userLanguage;
 // Smooth scroll pour les ancres
 document.addEventListener("DOMContentLoaded", function () {

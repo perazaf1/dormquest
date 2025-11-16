@@ -20,6 +20,9 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 </head>
 <body>
+
+    
+
     <!-- Header -->
     <header class="header">
         <div class="header__container">
@@ -30,8 +33,9 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
                 </a>
             </div>
             <nav class="header__nav">
-                <a href="#annonces" class="header__nav-link">Annonces</a>
                 <a href="#avantages" class="header__nav-link">Avantages</a>
+                <a href="#annonces" class="header__nav-link">Annonces</a>
+                
                 <a href="#faq" class="header__nav-link">FAQ</a>
                 <a href="#apropos" class="header__nav-link">À propos</a>
                 
@@ -295,6 +299,10 @@ $userType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : null;
             </p>
         </div>
     </footer>
+
+<div class="index__arrow">
+    <img src="images/arrow-up.svg" alt="flèche de retour en haut" class="index__arrow-img" />
+</div>
 
     <script src="js/main.js"></script>
     <script src="js/register.js"></script>
