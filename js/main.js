@@ -5,7 +5,7 @@ const btn = document.querySelector('.index__arrow');
 
 // Afficher/masquer le bouton selon le scroll
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 1000) { // Apparaît après 1000px de scroll
+    if (window.scrollY > 1400) { // Apparaît après 1400px de scroll
         btn.classList.add('visible');
     } else {
         btn.classList.remove('visible');

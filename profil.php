@@ -341,7 +341,7 @@ try {
 
                     <!-- Danger Zone -->
                     <div class="danger-zone">
-                        <h3 class="danger-zone__title">⚠️ Zone de danger</h3>
+                        <h3 class="danger-zone__title">⚠️ Action sensible ⚠️</h3>
                         <p class="danger-zone__text">
                             La suppression de votre compte est irréversible.
                         </p>
