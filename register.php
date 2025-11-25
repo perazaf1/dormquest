@@ -1,5 +1,5 @@
 <?php
-// register.php - Page d'inscription DormQuest
+// register.php - Page d'inscription de DormQuest 
 session_start();
 
 // Si déjà connecté, redirection selon le rôle
