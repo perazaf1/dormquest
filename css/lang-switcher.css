@@ -1,0 +1,51 @@
+/* ==========================================
+   Sélecteur de langue - Language Switcher
+   ========================================== */
+
+.header__lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-gray-light);
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.header__lang-link {
+    color: var(--color-gray);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: var(--transition);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.header__lang-link:hover {
+    color: var(--color-primary);
+    background-color: var(--color-white);
+}
+
+.header__lang-link.active {
+    color: var(--color-white);
+    background-color: var(--color-primary);
+}
+
+.header__lang-separator {
+    color: var(--color-gray);
+    font-weight: 300;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header__lang-switcher {
+        padding: 0.4rem 0.8rem;
+        gap: 0.3rem;
+    }
+
+    .header__lang-link {
+        font-size: 0.8rem;
+        padding: 0.2rem 0.4rem;
+    }
+}
