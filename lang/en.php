@@ -41,7 +41,7 @@ return [
         'contact_title' => 'Direct contact',
         'contact_text' => 'Apply with one click and communicate directly with landlords.',
 
-        'file_title' => 'Easy file',
+        'file_title' => 'Dossier facile',
         'file_text' => 'Easily create your file with government forms.',
 
         'apl_title' => 'Housing aid calculator',
